@@ -1,0 +1,33 @@
+.create-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  flex-grow: 1;
+
+  border: 1px red solid;
+}
+
+.create-list-content {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  flex-grow: 1;
+
+  border: 1px blue solid;
+}
+
+.create-list-editor {
+  display: flex;
+  flex-direction: column;
+  width: 45%;
+
+  border: 1px pink solid;
+}
+
+.create-list-preview {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+
+  border: 1px white solid;
+}
