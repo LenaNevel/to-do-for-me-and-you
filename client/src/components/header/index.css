@@ -19,12 +19,12 @@
 .header-main-text {
   color: orange;
   font-weight: 700;
-  font-size: 5em;
+  font-size: min(5em,50px);
 }
 
 .header-sub-text {
   color: yellow;
   font-weight: 400;
-  font-size: 1.5em;
+  font-size: min(1.5em,20px);
   font-style: italic;
 }
