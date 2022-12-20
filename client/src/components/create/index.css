@@ -19,9 +19,54 @@
 .create-list-editor {
   display: flex;
   flex-direction: column;
-  width: 45%;
+  width: 40%;
+  padding: 30px;
 
   border: 1px pink solid;
+}
+
+.create-list-title-content {
+  display: flex;
+  flex-direction: column;
+  height: 45px;
+  margin-bottom: 30px;
+
+  border: 2px red solid;
+}
+
+.create-list-title {
+  height: 100%;
+  padding: 10px;
+  border: 2px #212121 solid;
+  border-radius: 15px;
+  color: black;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.create-list-items-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 5px;
+
+  border: 2px red solid;
+}
+
+.create-list-items {
+  height: 15px;
+  padding: 10px;
+  border: 2px #212121 solid;
+  border-radius: 15px;
+  color: black;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.create-list-items:focus,
+.create-list-title:focus {
+  outline: none !important;
+  border: 2px #39ff14 solid;
 }
 
 .create-list-preview {
