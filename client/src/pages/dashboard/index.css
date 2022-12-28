@@ -12,6 +12,7 @@
     flex-direction: row;
     flex-wrap: wrap;
     flex-grow: 1;
+    gap: 10px;
 
     border: 1px blue solid;
 }
