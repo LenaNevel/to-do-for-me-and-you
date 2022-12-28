@@ -1,0 +1,17 @@
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    flex-grow: 1;
+  
+    border: 1px red solid;
+}
+
+.dashboard-content {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex-grow: 1;
+
+    border: 1px blue solid;
+}

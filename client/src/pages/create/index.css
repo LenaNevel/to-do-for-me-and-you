@@ -1,10 +1,39 @@
 .create-list {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: wrap;
   flex-grow: 1;
 
-  border: 1px red solid;
+  border: 5px red solid;
+}
+
+.create-list-footer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  height: 10%;
+
+  border: 1px white solid;
+}
+
+.create-list-footer-content {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  flex: 1;
+  align-items: center;
+  justify-content: end;
+  padding: 5px 15px;
+
+  border: 5px blue solid;
+}
+
+.create-list-save-button {
+  background-color: white;
+  color: #212121;
+  width: 100px;
+  height: 75%;
+  border-radius: 10px;
 }
 
 .create-list-content {
@@ -13,7 +42,7 @@
   flex-wrap: wrap;
   flex-grow: 1;
 
-  border: 1px blue solid;
+  /* border: 1px blue solid; */
 }
 
 .create-list-editor {

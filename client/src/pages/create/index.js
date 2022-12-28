@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 
 import "./index.css";
+
+import { createList } from '../../services/listServices';
+
 const toDo = [{ id: 1, value: 'add the preview' }, { id: 2, value: 'save to database' }, { id: 3, value: 'get a store going' }, { id: 4, value: 'fix title to take on % of height' }];
 let toDoTitle = 'ToDo List Project';
 
@@ -67,6 +70,12 @@ const CreateToDoList = () => {
     toDoTitle = event.target.value;
   }
 
+  const saveToDoList = () => {
+    console.log("I WANT TO SAVE MYSELF SO IM CALLING SERVICES");
+    createList({title: toDoTitle, tasks: toDo})
+
+  }
+
 
   return (
     <div className="create-list">
@@ -91,6 +100,11 @@ const CreateToDoList = () => {
               <ol className="create-list-preview-items-content">{createPreviewListMap()}</ol>
             </div>
           </div>
+        </div>
+      </div>
+      <div className="create-list-footer">
+        <div className="create-list-footer-content">
+          <button className="create-list-save-button" onClick={saveToDoList}>Save</button>
         </div>
       </div>
     </div>
