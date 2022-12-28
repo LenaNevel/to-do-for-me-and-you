@@ -8,6 +8,12 @@ const createList = async (req, res) => {
     }
     const result = DBservices.createList(data);
 };
+
+const getAllLists = async (req, res) => {
+    const result = await DBservices.getAllLists();
+    res.send(result);
+}
 module.exports = {
     createList,
+    getAllLists
 }

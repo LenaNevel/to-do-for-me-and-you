@@ -22,7 +22,7 @@
   flex-wrap: wrap;
   flex: 1;
   align-items: center;
-  justify-content: end;
+  justify-content: flex-end;
   padding: 5px 15px;
 
   border: 5px blue solid;

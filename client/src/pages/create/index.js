@@ -4,7 +4,7 @@ import "./index.css";
 
 import { createList } from '../../services/listServices';
 
-const toDo = [{ id: 1, value: 'add the preview' }, { id: 2, value: 'save to database' }, { id: 3, value: 'get a store going' }, { id: 4, value: 'fix title to take on % of height' }];
+const toDo = [];
 let toDoTitle = 'ToDo List Project';
 
 const CreateToDoList = () => {
