@@ -1,34 +1,31 @@
 import './index.css';
-import { useGetListsQuery } from '../../redux/apiSlice';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { getToDoLists } from '../../redux/toDoSlice';
 
 import SingleList from '../../components/singleList';
 
-
 const Dashboard = () => {
-
-  const {
-    data: lists = {},
-    // isLoading,
-    // isFetching,
-    isSuccess,
-    // isError,
-    // error,
-  } = useGetListsQuery()
-
-  // console.log(lists)
-  // console.log(isSuccess)
-  // console.log(isLoading)
-  // console.log(isError)
-  // console.log(isFetching)
-  // console.log(error)
-
-  return (
-    <div className="dashboard">
-      <div className="dashboard-content">
-        {isSuccess && lists && Object.keys(lists).map((list) => <SingleList data={lists[list]} key={list}/>)}
-      </div>
-    </div>
-);
+    const { toDoLists, isSuccess } = useSelector((state) => state.toDoLists);
+    const dispatch = useDispatch();
+    // add what happens if it's loading
+    // add what happens if there is an error;
+    useEffect(() => {
+        // add the it's not loading
+        !isSuccess && dispatch(getToDoLists());
+    }, [dispatch, isSuccess]);
+    return (
+        <div className="dashboard">
+            <div className="dashboard-content">
+                {isSuccess &&
+                    toDoLists &&
+                    Object.keys(toDoLists).map((list) => {
+                        console.log(toDoLists[list]);
+                        return <SingleList data={toDoLists[list]} key={list} />;
+                    })}
+            </div>
+        </div>
+    );
 };
 
 export default Dashboard;

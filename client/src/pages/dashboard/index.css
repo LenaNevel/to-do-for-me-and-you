@@ -4,7 +4,7 @@
     flex-wrap: wrap;
     flex-grow: 1;
   
-    border: 1px red solid;
+    /* border: 1px red solid; */
 }
 
 .dashboard-content {
@@ -12,7 +12,8 @@
     flex-direction: row;
     flex-wrap: wrap;
     flex-grow: 1;
-    gap: 10px;
+    gap: 15px;
+    margin: 20px;
 
-    border: 1px blue solid;
+    /* border: 1px blue solid; */
 }

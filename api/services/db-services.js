@@ -15,7 +15,6 @@ const createList = async (data) => {
             const sqlQuery = 'INSERT INTO "tasks" (title, task, completed) VALUES (?,?,?)';
             let anyErr = false;
             for (const task of data.tasks) {
-                console.log(task)
                 db.run(sqlQuery, [id, task.value, false], (err) => {
                     if (err) {
                         console.log(err);
@@ -50,7 +49,23 @@ const getAllLists = async () => {
     }, {});
     return groupByTitle
 };
+const updateTask = async (data) => {
+    console.log(data);
+    if (!data) return;
+    let id = (data.condition || {}).id;
+    // let projectID = (data.condition || {}).projectID;
+    // rewrite for when there is multiple things to update;
+    const update = `UPDATE "tasks" SET completed = ${data.update.completed} WHERE id = ${id}`;
+    db.run(update, [], (err) => {
+        if (err) {
+            console.log(err);
+        }
+    })
+    // add the update of the title table for updated column DATE;
+};
+
 module.exports = {
     createList,
-    getAllLists
+    getAllLists,
+    updateTask
 }

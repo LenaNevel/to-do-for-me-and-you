@@ -1,114 +1,133 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import "./index.css";
+import './index.css';
 
-import { createList } from '../../services/listServices';
+// import { createList } from '../../services/listServices';
 
-const toDo = [];
-let toDoTitle = 'ToDo List Project';
+// const toDo = [];
+let title = '';
+let countId = 1;
 
 const CreateToDoList = () => {
-  const [toDoList, updateToDoListState] = useState(toDo);
+    const [hasTitle, updateHasTitle] = useState(title);
+    const [data, updateData] = useState([]);
 
-  const addToList = (event) => {
-    if (event.keyCode === 13) {
-      toDo.push({ id: toDo.length + 1, value: event.target.value });
-      updateToDoListState([...toDo]);
-    }
-  };
+    const addNewTask = (event) => {
+        if (event.keyCode === 13) {
+            const newToDo = {
+                id: countId,
+                task: event.target.value,
+                completed: false,
+                projectID: 'new',
+                title: title
+            };
+            countId = countId + 1;
+            updateData([...data, newToDo]);
+            event.target.value = '';
+        }
+    };
 
+    // const editToDoList = (event) => {
+    //     const index = toDo.findIndex((object) => {
+    //         return object.id.toString() === event.target.id;
+    //     });
+    //     if (index > -1) {
+    //         toDo[index].task = event.target.value;
+    //         updateToDoListState([...toDo]);
+    //     }
+    // };
 
-  const editToDoList = (event) => {
-    const index = toDo.findIndex(object => {
-      return object.id.toString() === event.target.id;
-    });
-    if (index > -1) {
-      toDo[index].value = event.target.value;
-      updateToDoListState([...toDo]);
-    }
-  }
+    // const createToDoListMap = () => {
+    //     const toDoListMap = toDoList.map(function (todo) {
+    //         return (
+    //             <input
+    //                 key={todo.id.toString()}
+    //                 className="create-list-items"
+    //                 id={todo.id.toString()}
+    //                 placeholder="enter TO DO"
+    //                 defaultValue={todo.task}
+    //                 onChange={editToDoList}
+    //             ></input>
+    //         );
+    //     });
+    //     toDoListMap.push(
+    //         <input
+    //             key={(toDoList.length + 1).toString()}
+    //             className="create-list-items"
+    //             placeholder="enter TO DO"
+    //             onKeyUp={addToList}
+    //             // eslint-disable-next-line jsx-a11y/no-autofocus
+    //             autoFocus
+    //         ></input>
+    //     );
+    //     return toDoListMap;
+    // };
 
-  const createToDoListMap = () => {
-    const toDoListMap = toDoList.map(function (todo) {
-      return (
-        <input
-          key={todo.id.toString()}
-          className="create-list-items"
-          id={todo.id.toString()}
-          placeholder="enter TO DO"
-          defaultValue={todo.value}
-          onChange={editToDoList}
-        ></input>
-      );
-    });
-    toDoListMap.push(
-      <input
-        key={(toDoList.length + 1).toString()}
-        className="create-list-items"
-        placeholder="enter TO DO"
-        onKeyUp={addToList}
-        autoFocus
-      ></input>
-    )
-    return toDoListMap;
-  }
+    const editTitleToDo = (event) => {
+        title = event.target.value;
+        if (event.keyCode && event.keyCode === 13) {
+            updateHasTitle(true);
+        }
+    };
 
-  const createPreviewListMap = () => {
-    const toDoListMap = toDoList.map(function (todo) {
-      return (
-        <li
-          key={todo.id.toString()}
-          className="create-list-preview-items"
-          id={todo.id.toString()}
-        >{todo.value}</li>
-      );
-    });
-    return toDoListMap;
-  }
+    const saveList = () => {
+        console.log('I WANT TO SAVE MYSELF SO IM CALLING SERVICES');
+        console.log(data);
+        // createList({title: toDoTitle, tasks: toDo})
+    };
 
-  const editTitleToDo = (event) => {
-    toDoTitle = event.target.value;
-  }
-
-  const saveToDoList = () => {
-    console.log("I WANT TO SAVE MYSELF SO IM CALLING SERVICES");
-    createList({title: toDoTitle, tasks: toDo})
-
-  }
-
-
-  return (
-    <div className="create-list">
-      <div className="create-list-content">
-        <div className="create-list-editor">
-          <div className="create-list-editor-content">
-          <div className="create-list-title-content">
-            <input
-              className="create-list-title"
-              placeholder="ENTER TITLE OF LIST"
-              defaultValue={toDoTitle}
-              onChange={editTitleToDo}
-            />
-          </div>
-          <div className="create-list-items-content">{createToDoListMap()}</div>
-          </div>
-        </div>
-        <div className="create-list-preview">
-          <div className="create-list-preview-content">
-            <div className="create-list-preview-title-content">
-              <div className="create-list-preview-title">{toDoTitle}</div>
-              <ol className="create-list-preview-items-content">{createPreviewListMap()}</ol>
+    return (
+        <div className="create-list">
+            <div className="create-list-content">
+                <div className="create-single-list">
+                    <div className="create-single-list-content">
+                        <div className="create-single-list-title">
+                            <input
+                                placeholder="Enter a TITLE and press RETURN"
+                                defaultValue={title}
+                                onKeyUp={editTitleToDo}
+                            />
+                        </div>
+                        {hasTitle && (
+                            <div className="create-single-list-tasks">
+                                {data.map((task) => {
+                                    return (
+                                        <label className="create-single-list-task" key={task.id}>
+                                            <input
+                                                type="checkbox"
+                                                checked={false}
+                                                readOnly
+                                                id={task.id}
+                                                // onChange={handleToggle}
+                                            />
+                                            {task.task}
+                                        </label>
+                                    );
+                                })}
+                                <div className="create-single-list-task">
+                                    <input type="checkbox" checked={false} readOnly />
+                                    <input
+                                        className="create-single-list-task-input"
+                                        placeholder="Enter a TASK and press RETURN"
+                                        onKeyUp={addNewTask}
+                                        // eslint-disable-next-line jsx-a11y/no-autofocus
+                                        autoFocus
+                                    />
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
             </div>
-          </div>
+            <div className="create-list-footer">
+                <div className="create-list-footer-content">
+                    <button className="create-list-save-button" onClick={saveList}>
+                        Save
+                    </button>
+                </div>
+            </div>
         </div>
-      </div>
-      <div className="create-list-footer">
-        <div className="create-list-footer-content">
-          <button className="create-list-save-button" onClick={saveToDoList}>Save</button>
-        </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default CreateToDoList;

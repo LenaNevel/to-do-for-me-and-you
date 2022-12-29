@@ -13,7 +13,13 @@ const getAllLists = async (req, res) => {
     const result = await DBservices.getAllLists();
     res.send(result);
 }
+
+const updateTask = async (req, res) => {
+    DBservices.updateTask(req.body);
+}
+
 module.exports = {
     createList,
-    getAllLists
+    getAllLists,
+    updateTask
 }
