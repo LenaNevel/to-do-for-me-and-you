@@ -6,6 +6,11 @@ const initialState = {
     isSuccess: false
 };
 
+const headers = {
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
+};
+
 export const getToDoLists = createAsyncThunk('/lists', async () => {
     try {
         // need to move the api call to it's own function;
@@ -21,16 +26,11 @@ const toDoListsSlice = createSlice({
     name: 'lists',
     initialState,
     reducers: {
-        //in here will go the functions to filter the to do lists to display the proper one for editing
         toggleTask(state, { payload }) {
             const { id, projectID } = payload;
             const existingTask = state.toDoLists[projectID].find((task) => task.id.toString() === id);
             if (existingTask) {
                 existingTask.completed = !existingTask.completed;
-                const headers = {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                };
                 fetch('http://localhost:4000/api/update-task', {
                     method: 'POST',
                     headers: headers,
@@ -39,6 +39,22 @@ const toDoListsSlice = createSlice({
                         update: { completed: existingTask.completed }
                     })
                 });
+            }
+        },
+        saveNewTask(state, { payload }) {
+            // move list title and project ID to utils since we re-use this;
+            console.log(payload);
+            const listTitle = (payload.find((x) => x && x.title) || {}).title;
+            let projectID = (payload.find((x) => x && x.projectID) || {}).projectID;
+            if (listTitle) {
+                fetch('http://localhost:4000/api/create-list', {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify({ payload })
+                });
+            }
+            if (projectID) {
+                state.toDoLists[projectID] = payload;
             }
         }
     },
@@ -54,5 +70,5 @@ const toDoListsSlice = createSlice({
     }
 });
 
-export const { toggleTask } = toDoListsSlice.actions;
+export const { toggleTask, saveNewTask } = toDoListsSlice.actions;
 export const toDoListReducer = toDoListsSlice.reducer;

@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
+const { nanoid } = require('nanoid');
 
 import './index.css';
 
-// import { createList } from '../../services/listServices';
+import { useDispatch } from 'react-redux';
+import { saveNewTask } from '../../redux/toDoSlice';
 
-// const toDo = [];
 let title = '';
-let countId = 1;
+let orderId = 0;
 
 const CreateToDoList = () => {
     let prevCode;
+
+    const dispatch = useDispatch();
+
     const [hasTitle, updateHasTitle] = useState(title);
     const [data, updateData] = useState([]);
 
@@ -22,17 +26,20 @@ const CreateToDoList = () => {
     const addNewTask = (event) => {
         if (event.keyCode === 13) {
             const margin = getMargin(event.target.parentNode);
+            const taskId = nanoid(10);
+            const projectID = nanoid(10);
             const newToDo = {
-                id: countId,
+                id: taskId,
                 task: event.target.value,
                 completed: false,
-                projectID: 'new',
+                projectID: projectID,
                 title: title,
-                margin: margin
+                indent: margin,
+                taskOrder: orderId
             };
-            countId = countId + 1;
             updateData([...data, newToDo]);
             event.target.value = '';
+            orderId = orderId + 1;
         }
     };
 
@@ -50,54 +57,23 @@ const CreateToDoList = () => {
     };
 
     const editNewTask = (event) => {
-        console.log('i am in edit');
         const edit = data.find((task) => (task.id = event.target.id));
         const margin = getMargin(event.target.parentNode);
         edit.task = event.target.value;
-        edit.margin = margin;
+        edit.indent = margin;
     };
-
-    // const createToDoListMap = () => {
-    //     const toDoListMap = toDoList.map(function (todo) {
-    //         return (
-    //             <input
-    //                 key={todo.id.toString()}
-    //                 className="create-list-items"
-    //                 id={todo.id.toString()}
-    //                 placeholder="enter TO DO"
-    //                 defaultValue={todo.task}
-    //                 onChange={editToDoList}
-    //             ></input>
-    //         );
-    //     });
-    //     toDoListMap.push(
-    //         <input
-    //             key={(toDoList.length + 1).toString()}
-    //             className="create-list-items"
-    //             placeholder="enter TO DO"
-    //             onKeyUp={addToList}
-    //             // eslint-disable-next-line jsx-a11y/no-autofocus
-    //             autoFocus
-    //         ></input>
-    //     );
-    //     return toDoListMap;
-    // };
 
     const editTitleToDo = (event) => {
         title = event.target.value;
         if (event.keyCode && event.keyCode === 13) {
-            if (hasTitle) {
-                event.keyCode = 9;
-            } else {
+            if (!hasTitle) {
                 updateHasTitle(true);
             }
         }
     };
 
     const saveList = () => {
-        console.log('I WANT TO SAVE MYSELF SO IM CALLING SERVICES');
-        console.log(data);
-        // createList({title: toDoTitle, tasks: toDo})
+        dispatch(saveNewTask(data));
     };
 
     return (
@@ -115,14 +91,14 @@ const CreateToDoList = () => {
                         {hasTitle && (
                             <div className="create-single-list-tasks">
                                 {data.map((task) => {
+                                    const margin = task.indent ? task.indent + 'px' : '0px';
                                     return (
-                                        <div className="create-single-list-task" key={task.id}>
-                                            <input
-                                                type="checkbox"
-                                                checked={false}
-                                                readOnly
-                                                // onChange={handleToggle}
-                                            />
+                                        <div
+                                            className="create-single-list-task"
+                                            key={task.id}
+                                            style={{ marginLeft: margin }}
+                                        >
+                                            <input type="checkbox" checked={false} readOnly />
                                             <input
                                                 className="create-single-list-task-input"
                                                 id={task.id}

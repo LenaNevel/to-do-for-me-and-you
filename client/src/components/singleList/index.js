@@ -5,8 +5,11 @@ import { useDispatch } from 'react-redux';
 import { toggleTask } from '../../redux/toDoSlice';
 
 const SingleList = ({ data }) => {
-    // render() {
     const dispatch = useDispatch();
+    const dataForSort = [...data];
+    const dataSorted = dataForSort.sort(function (a, b) {
+        return a.taskOrder - b.taskOrder;
+    });
     const listTitle = (data.find((x) => x && x.title) || {}).title;
     const projectID = (data.find((x) => x && x.projectID) || {}).projectID;
     const handleToggle = (event) => {
@@ -17,9 +20,10 @@ const SingleList = ({ data }) => {
             <div className="single-list-content">
                 <div className="single-list-title">{listTitle}</div>
                 <div className="single-list-tasks">
-                    {data.map((task) => {
+                    {dataSorted.map((task) => {
+                        const margin = task.indent ? task.indent + 'px' : '0px';
                         return (
-                            <label className="single-list-task" key={task.id}>
+                            <label className="single-list-task" key={task.id} style={{ marginLeft: margin }}>
                                 <input
                                     type="checkbox"
                                     checked={task.completed}
@@ -35,7 +39,5 @@ const SingleList = ({ data }) => {
         </div>
     );
 };
-// };
-// }
 
 export default SingleList;

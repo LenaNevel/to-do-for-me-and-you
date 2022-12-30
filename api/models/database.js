@@ -26,7 +26,7 @@ const db = new sqlite3.Database(DBSOURCE, (err) => {
         });  
         console.log('Creating tasks table next...');
         db.run(`CREATE TABLE tasks (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id VARCHAR(10) PRIMARY KEY,
             title VARCHAR(10), 
             task TEXT, 
             completed BOOLEAN
@@ -38,7 +38,22 @@ const db = new sqlite3.Database(DBSOURCE, (err) => {
             }else{
                 console.log('CREATED TABLE tasks')
             }
-        });  
+        });
+        console.log('Creating attributes table next...');
+        db.run(`CREATE TABLE attributes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            taskID VARCHAR(10),
+            indent INTEGER,
+            taskOrder INTEGER
+            )`,
+        (err) => {
+            if (err) {
+                // Table already created
+                console.log(err.message)
+            }else{
+                console.log('CREATED TABLE attributes')
+            }
+        });   
     }
 });
 

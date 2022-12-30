@@ -20,7 +20,6 @@ const Dashboard = () => {
                 {isSuccess &&
                     toDoLists &&
                     Object.keys(toDoLists).map((list) => {
-                        console.log(toDoLists[list]);
                         return <SingleList data={toDoLists[list]} key={list} />;
                     })}
             </div>
