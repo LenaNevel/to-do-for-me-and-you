@@ -9,17 +9,26 @@ let title = '';
 let countId = 1;
 
 const CreateToDoList = () => {
+    let prevCode;
     const [hasTitle, updateHasTitle] = useState(title);
     const [data, updateData] = useState([]);
 
+    const getMargin = (div) => {
+        let margin = parseInt(div.style.marginLeft.replace('px', ''));
+        if (!margin) margin = 0;
+        return margin;
+    };
+
     const addNewTask = (event) => {
         if (event.keyCode === 13) {
+            const margin = getMargin(event.target.parentNode);
             const newToDo = {
                 id: countId,
                 task: event.target.value,
                 completed: false,
                 projectID: 'new',
-                title: title
+                title: title,
+                margin: margin
             };
             countId = countId + 1;
             updateData([...data, newToDo]);
@@ -27,15 +36,26 @@ const CreateToDoList = () => {
         }
     };
 
-    // const editToDoList = (event) => {
-    //     const index = toDo.findIndex((object) => {
-    //         return object.id.toString() === event.target.id;
-    //     });
-    //     if (index > -1) {
-    //         toDo[index].task = event.target.value;
-    //         updateToDoListState([...toDo]);
-    //     }
-    // };
+    const indentTaskInput = (event) => {
+        if (event.keyCode == 9) {
+            event.preventDefault();
+            const parentNode = event.target.parentNode;
+            let previousMargin = getMargin(parentNode);
+            let newMargin = prevCode === 16 ? previousMargin - 20 : previousMargin + 20;
+            if (newMargin < 0) newMargin = 0;
+            parentNode.style.marginLeft = newMargin + 'px';
+        } else {
+            prevCode = event.keyCode;
+        }
+    };
+
+    const editNewTask = (event) => {
+        console.log('i am in edit');
+        const edit = data.find((task) => (task.id = event.target.id));
+        const margin = getMargin(event.target.parentNode);
+        edit.task = event.target.value;
+        edit.margin = margin;
+    };
 
     // const createToDoListMap = () => {
     //     const toDoListMap = toDoList.map(function (todo) {
@@ -66,7 +86,11 @@ const CreateToDoList = () => {
     const editTitleToDo = (event) => {
         title = event.target.value;
         if (event.keyCode && event.keyCode === 13) {
-            updateHasTitle(true);
+            if (hasTitle) {
+                event.keyCode = 9;
+            } else {
+                updateHasTitle(true);
+            }
         }
     };
 
@@ -92,16 +116,22 @@ const CreateToDoList = () => {
                             <div className="create-single-list-tasks">
                                 {data.map((task) => {
                                     return (
-                                        <label className="create-single-list-task" key={task.id}>
+                                        <div className="create-single-list-task" key={task.id}>
                                             <input
                                                 type="checkbox"
                                                 checked={false}
                                                 readOnly
-                                                id={task.id}
                                                 // onChange={handleToggle}
                                             />
-                                            {task.task}
-                                        </label>
+                                            <input
+                                                className="create-single-list-task-input"
+                                                id={task.id}
+                                                placeholder="Enter a TASK and press RETURN"
+                                                defaultValue={task.task}
+                                                onKeyUp={editNewTask}
+                                                onKeyDown={indentTaskInput}
+                                            />
+                                        </div>
                                     );
                                 })}
                                 <div className="create-single-list-task">
@@ -110,6 +140,7 @@ const CreateToDoList = () => {
                                         className="create-single-list-task-input"
                                         placeholder="Enter a TASK and press RETURN"
                                         onKeyUp={addNewTask}
+                                        onKeyDown={indentTaskInput}
                                         // eslint-disable-next-line jsx-a11y/no-autofocus
                                         autoFocus
                                     />
