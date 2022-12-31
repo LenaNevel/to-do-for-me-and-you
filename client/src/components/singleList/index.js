@@ -17,6 +17,10 @@ const SingleList = ({ data }) => {
     };
     return (
         <div className="single-list">
+            <div className="single-list-control-panel">
+                <div className="single-list-control-buttons">✏️</div>
+                <div className="single-list-control-buttons">❌</div>
+            </div>
             <div className="single-list-content">
                 <div className="single-list-title">{listTitle}</div>
                 <div className="single-list-tasks">
