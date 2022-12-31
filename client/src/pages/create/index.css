@@ -12,6 +12,7 @@
   flex-wrap: wrap;
   flex-grow: 1;
   justify-content: center;
+  padding: 20px 10px;
 }
 
 .create-single-list {
@@ -31,7 +32,6 @@
   flex-direction: column;
   gap: 15px;
   padding: 15px;
-  color: white;
   flex: 1;
 
   border: 2px dashed #E37383;
@@ -47,7 +47,7 @@
 
 .create-single-list-title >input {
   background-color: #212121;
-  color: white;
+  color: var(--white);
   font-weight: 900;
   font-size: 20px;
   text-align: center;
@@ -70,7 +70,7 @@
 
 .create-single-list-task-input {
   background-color: #212121;
-  color: white;
+  color: var(--white);
   text-align: flex-start;
   font-size: 15px;
   width: 100%;

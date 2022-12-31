@@ -13,6 +13,11 @@ html {
   display: flex;
   height: 100%;
   width: 100%;
+  color: #FFFDD0;
+
+  --white: #FFFDD0;
+  --pink: #e37383;
+  --green: #98fb98;
 }
 #root {
   display: flex;

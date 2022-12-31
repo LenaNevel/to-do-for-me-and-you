@@ -3,25 +3,31 @@
   flex-direction: column;
   height: 15%;
 
+  flex: 1;
 }
 
 .header-content {
   display: flex;
   flex-direction: column;
-  height: 100%;
-
+  flex: 1;
+  justify-content: space-between;
+  align-self: stretch;
   align-items: center;
+  padding: 15px 10px;
 }
 
 .header-main-text {
-  color: orange;
-  font-weight: 700;
-  font-size: min(5em,50px);
+  color: var(--white);
+  font-weight: 900;
+  /* font-size: 20px; */
+  /* text-shadow: 1px 1px 10px #98fb98, 1px -1px 5px #e37383, -1px 1px 10px #98fb98, -1px -1px 5px #e37383; */
 }
 
 .header-sub-text {
-  color: yellow;
-  font-weight: 400;
-  font-size: min(1.5em,20px);
-  font-style: italic;
+  color: var(--pink);
+  font-weight: 700;
+  /* font-size: min(1.5em,20px); */
+  padding: 0px 40px 10px 40px;
+  border-bottom: 2px dashed var(--green);
+  /* text-shadow: 1px 1px 20px #E37383, 1px -1px 10px #98fb98, -1px 1px 20px #E37383, -1px -1px 10px #98fb98; */
 }

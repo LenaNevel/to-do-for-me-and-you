@@ -67,10 +67,13 @@ const updateTask = async (data) => {
     let id = (data.condition || {}).id;
     // let projectID = (data.condition || {}).projectID;
     // rewrite for when there is multiple things to update;
-    const update = `UPDATE "tasks" SET completed = ${data.update.completed} WHERE id = ${id}`;
-    db.run(update, [], (err) => {
+    const update = `UPDATE "tasks" 
+                    SET completed = ?
+                    WHERE id = ?
+                    `
+    db.run(update, [data.update.completed, id], (err) => {
         if (err) {
-            console.log('Failed updating tasks for id ', id);
+            console.log(`Failed updating tasks for id ${id}`);
             console.log(err);
         }
     })
