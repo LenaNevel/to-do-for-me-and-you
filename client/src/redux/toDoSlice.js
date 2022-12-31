@@ -43,7 +43,6 @@ const toDoListsSlice = createSlice({
         },
         saveNewTask(state, { payload }) {
             // move list title and project ID to utils since we re-use this;
-            console.log(payload);
             const listTitle = (payload.find((x) => x && x.title) || {}).title;
             let projectID = (payload.find((x) => x && x.projectID) || {}).projectID;
             if (listTitle) {
@@ -69,6 +68,12 @@ const toDoListsSlice = createSlice({
         }
     }
 });
+
+export const getListByProjectID = (state, { projectID }) => {
+    console.log('i am getting projectID list');
+    console.log(projectID);
+    console.log(state);
+};
 
 export const { toggleTask, saveNewTask } = toDoListsSlice.actions;
 export const toDoListReducer = toDoListsSlice.reducer;

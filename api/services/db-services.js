@@ -41,7 +41,13 @@ const createList = async (data) => {
 
 function getAll() {
    return new Promise ((resolve, reject) => {
-    const getAllQuery = 'SELECT tasks.id as id, title.id as projectID, title.name as title, task, completed, attributes.indent as indent, attributes.taskOrder as taskOrder FROM tasks INNER JOIN title ON title.id = tasks.title INNER JOIN attributes ON attributes.taskID = tasks.id';
+    // const getAllQuery = 'SELECT tasks.id as id, title.id as projectID, title.name as title, task, completed, attributes.indent as indent, attributes.taskOrder as taskOrder FROM tasks INNER JOIN title ON title.id = tasks.title INNER JOIN attributes ON attributes.taskID = tasks.id';
+    const getAllQuery = `SELECT tasks.id as id, title.id as projectID, title.name as title, task, completed, attributes.indent as indent, attributes.taskOrder as taskOrder 
+                        FROM "tasks"
+                        INNER JOIN title ON title.id = tasks.title
+                        INNER JOIN attributes ON attributes.taskID = tasks.id
+                        ORDER BY taskOrder ASC
+                        `
     return db.all(getAllQuery, [], (err, rows) => {
         if (err) {
             console.log(err)
