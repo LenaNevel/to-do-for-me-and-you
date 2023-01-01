@@ -57,6 +57,17 @@
     border-bottom: 2px solid white;
 }
 
+.single-list-title >input {
+    background-color: #212121;
+    color: var(--white);
+    font-weight: 900;
+    font-size: 16px;
+    text-align: center;
+    outline: none !important;
+    border: none;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  }
+
 .single-list-tasks {
     display: flex;
     flex-direction: column;
@@ -75,3 +86,14 @@
 .single-list-task >input {
     accent-color: #98FB98;
 }
+
+.create-task-input {
+    background-color: #212121;
+    color: var(--white);
+    text-align: flex-start;
+    font-size: 16px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    width: 100%;
+    outline: none !important;
+    border: none;
+  }
