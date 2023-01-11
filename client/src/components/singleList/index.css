@@ -97,3 +97,30 @@
     outline: none !important;
     border: none;
   }
+
+  .save-list-footer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    height: 5%;
+  }
+  
+  .save-list-footer-content {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex: 1;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 5px 5px 0px 5px;
+  }
+  
+  .save-list-save-button {
+    background-color: white;
+    color: #212121;
+    border-radius: 10px;
+    border: 2px #98FB98 solid;
+    font-size: 12px;
+    font-weight: 900;
+    padding: 0px 10px;
+  }

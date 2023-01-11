@@ -2,33 +2,37 @@ const db = require('../models/database');
 
 const { nanoid } = require("nanoid");
 
-const createList = async (data) => {
-    const insert = 'INSERT INTO "title" (id, name, created, updated) VALUES (?,?,?,?)';
+const editList = async (data) => {
+    // const insert = 'INSERT INTO "title" (id, name, created, updated) VALUES (?,?,?,?)';
+    const upsertTitle = `
+                            INSERT INTO "title" (id, name, created, updated) 
+                            VALUES (?,?,?,?)
+                            ON CONFLICT(id) DO UPDATE 
+                            SET name=excluded.name, updated=excluded.updated
+                        `
     const listTitle = (data.find((x) => x && x.title) || {}).title;
     let projectID = (data.find((x) => x && x.projectID) || {}).projectID;
     if (!projectID) projectID = nanoid(10);
     const date = new Date();
-    db.run(insert, [projectID, listTitle, date, date], (err) => {
+    db.run(upsertTitle, [projectID, listTitle, date, date], (err) => {
         if (err) {
             console.log('Error saving a new title', listTitle);
             console.log(err);
             return { success: false, error: err };
         } else {
-            const tasksQuery = 'INSERT INTO "tasks" (id, title, task, completed) VALUES (?,?,?,?)';
-            const attributesQuery = 'INSERT INTO "attributes" (taskID, indent, taskOrder) VALUES (?,?,?)'
+            // const tasksQuery = 'INSERT INTO "tasks" (id, title, task, completed, indent, taskOrder) VALUES (?,?,?,?,?,?)';
+            const tasksQuery =  `
+                                    INSERT INTO "tasks" (id, title, task, completed, indent, taskOrder) 
+                                    VALUES (?,?,?,?,?,?)
+                                    ON CONFLICT(id) DO UPDATE 
+                                    SET task=excluded.task, completed=excluded.completed, indent=excluded.indent, taskOrder=excluded.taskOrder
+                                `
             let anyErr = false;
             for (const task of data) {
-                const taskId = data.id || nanoid(10);
-                db.run(tasksQuery, [taskId, projectID, task.task, task.completed], (err) => {
+                const taskId = task.id || nanoid(10);
+                db.run(tasksQuery, [taskId, projectID, task.task, task.completed, task.indent, task.taskOrder], (err) => {
                     if (err) {
                         console.log('Error saving a new task', task.task);
-                        console.log(err);
-                        anyErr = true;
-                    }
-                })
-                db.run(attributesQuery, [taskId, task.indent, task.taskOrder], (err) => {
-                    if (err) {
-                        console.log('Error saving a new attribute for ', task.value)
                         console.log(err);
                         anyErr = true;
                     }
@@ -39,13 +43,44 @@ const createList = async (data) => {
     })
 };
 
+const deleteList = async (data) => {
+    // const insert = 'INSERT INTO "title" (id, name, created, updated) VALUES (?,?,?,?)';
+    const deleteTitle = `
+                            DELETE FROM "title"
+                            WHERE id=?;
+                        `
+    const deleteTasks = `
+                        DELETE FROM "tasks"
+                        WHERE title=?;
+                    `
+    const projectID = data.projectID;
+    if (!projectID) return;
+    db.run(deleteTitle, [projectID], (err) => {
+        if (err) {
+            console.log('Error deleting from title tasks for title  ', listTitle);
+            console.log(err);
+            return { success: false, error: err };
+        } else {
+            let anyErr = false;
+            db.run(deleteTasks, [projectID], (err) => {
+                if (err) {
+                    console.log('Error saving a new task', task.task);
+                    console.log(err);
+                    anyErr = true;
+                }
+            })
+            return { success: !anyErr};
+        }
+    })
+};
+
 function getAll() {
    return new Promise ((resolve, reject) => {
     // const getAllQuery = 'SELECT tasks.id as id, title.id as projectID, title.name as title, task, completed, attributes.indent as indent, attributes.taskOrder as taskOrder FROM tasks INNER JOIN title ON title.id = tasks.title INNER JOIN attributes ON attributes.taskID = tasks.id';
-    const getAllQuery = `SELECT tasks.id as id, title.id as projectID, title.name as title, task, completed, attributes.indent as indent, attributes.taskOrder as taskOrder 
+    const getAllQuery = `
+                        SELECT tasks.id as id, title.id as projectID, title.name as title, task, completed, indent, taskOrder 
                         FROM "tasks"
                         INNER JOIN title ON title.id = tasks.title
-                        INNER JOIN attributes ON attributes.taskID = tasks.id
                         ORDER BY taskOrder ASC
                         `
     return db.all(getAllQuery, [], (err, rows) => {
@@ -87,7 +122,8 @@ const updateTask = async (data) => {
 };
 
 module.exports = {
-    createList,
+    editList,
+    deleteList,
     getAllLists,
     updateTask
 }

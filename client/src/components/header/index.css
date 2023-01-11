@@ -1,15 +1,13 @@
 .header {
   display: flex;
   flex-direction: column;
-  height: 15%;
-
-  flex: 1;
 }
 
 .header-content {
   display: flex;
   flex-direction: column;
   flex: 1;
+  gap: 5px;
   justify-content: space-between;
   align-self: stretch;
   align-items: center;
@@ -19,15 +17,13 @@
 .header-main-text {
   color: var(--white);
   font-weight: 900;
-  /* font-size: 20px; */
-  /* text-shadow: 1px 1px 10px #98fb98, 1px -1px 5px #e37383, -1px 1px 10px #98fb98, -1px -1px 5px #e37383; */
+  font-size: calc((15vh + 15vw - 2.5rem) / 6);
 }
 
 .header-sub-text {
   color: var(--pink);
   font-weight: 700;
-  /* font-size: min(1.5em,20px); */
-  padding: 0px 40px 10px 40px;
+  font-size: calc((15vh + 15vw - 2.5rem) / 12);
+  padding: 0px 40px 5px 40px;
   border-bottom: 2px dashed var(--green);
-  /* text-shadow: 1px 1px 20px #E37383, 1px -1px 10px #98fb98, -1px 1px 20px #E37383, -1px -1px 10px #98fb98; */
 }

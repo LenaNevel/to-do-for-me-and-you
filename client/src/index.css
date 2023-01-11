@@ -19,6 +19,7 @@ html {
   --black: #212121;
   --pink: #e37383;
   --green: #98fb98;
+  --yellow: #FDDA0D;
 }
 #root {
   display: flex;

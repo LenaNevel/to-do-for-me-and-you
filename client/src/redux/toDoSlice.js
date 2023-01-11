@@ -26,27 +26,12 @@ const toDoListsSlice = createSlice({
     name: 'lists',
     initialState,
     reducers: {
-        toggleTask(state, { payload }) {
-            const { id, projectID } = payload;
-            const existingTask = state.toDoLists[projectID].find((task) => task.id.toString() === id);
-            if (existingTask) {
-                existingTask.completed = !existingTask.completed;
-                fetch('http://localhost:4000/api/update-task', {
-                    method: 'POST',
-                    headers: headers,
-                    body: JSON.stringify({
-                        condition: { id: id, projectID: projectID },
-                        update: { completed: existingTask.completed }
-                    })
-                });
-            }
-        },
-        saveNewTask(state, { payload }) {
+        saveTasks(state, { payload }) {
             // move list title and project ID to utils since we re-use this;
             const listTitle = (payload.find((x) => x && x.title) || {}).title;
             let projectID = (payload.find((x) => x && x.projectID) || {}).projectID;
             if (listTitle) {
-                fetch('http://localhost:4000/api/create-list', {
+                fetch('http://localhost:4000/api/edit-list', {
                     method: 'POST',
                     headers: headers,
                     body: JSON.stringify({ payload })
@@ -54,6 +39,17 @@ const toDoListsSlice = createSlice({
             }
             if (projectID) {
                 state.toDoLists[projectID] = payload;
+            }
+        },
+        deleteList(state, { payload }) {
+            const projectID = payload.projectID;
+            if (projectID) {
+                fetch('http://localhost:4000/api/delete-list', {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify({ payload })
+                });
+                delete state.toDoLists[projectID];
             }
         }
     },
@@ -69,11 +65,5 @@ const toDoListsSlice = createSlice({
     }
 });
 
-export const getListByProjectID = (state, { projectID }) => {
-    console.log('i am getting projectID list');
-    console.log(projectID);
-    console.log(state);
-};
-
-export const { toggleTask, saveNewTask } = toDoListsSlice.actions;
+export const { saveTasks, deleteList } = toDoListsSlice.actions;
 export const toDoListReducer = toDoListsSlice.reducer;

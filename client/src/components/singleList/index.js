@@ -1,41 +1,156 @@
-// /* eslint-disable prettier/prettier */
-// /* eslint-disable react/jsx-no-comment-textnodes */
-// import React, { Component } from 'react';
 import './index.css';
 import React, { useState } from 'react';
 
-import { useDispatch } from 'react-redux';
-import { toggleTask } from '../../redux/toDoSlice';
+const { nanoid } = require('nanoid');
 
-const SingleList = ({ data }) => {
-    const [editList, updateEditList] = useState(false);
+import { useDispatch } from 'react-redux';
+import { saveTasks, deleteList } from '../../redux/toDoSlice';
+
+let orderId = 0;
+
+const SingleList = ({ tasks }) => {
+    let prevCode;
+    let editedTasks = {};
+
+    if (tasks && tasks.length) {
+        orderId = tasks.length + 1;
+    }
+    const [editList, updateEditList] = useState(tasks && tasks.length ? false : true);
+    const [data, updateData] = useState([...tasks]);
 
     const dispatch = useDispatch();
-    const listTitle = (data.find((x) => x && x.title) || {}).title;
+    let listTitle = (data.find((x) => x && x.title) || {}).title;
     const projectID = (data.find((x) => x && x.projectID) || {}).projectID;
-    const handleToggle = (event) => {
-        dispatch(toggleTask({ id: event.target.id, projectID: projectID }));
+
+    const getMargin = (div) => {
+        let margin = parseInt(div.style.marginLeft.replace('px', ''));
+        if (!margin) margin = 0;
+        return margin;
     };
-    const handleEditList = () => {
-        updateEditList(true);
+    const indentTaskInput = (event) => {
+        if (event.keyCode == 9) {
+            event.preventDefault();
+            const parentNode = event.target.parentNode;
+            let previousMargin = getMargin(parentNode);
+            let newMargin = prevCode === 16 ? previousMargin - 20 : previousMargin + 20;
+            if (newMargin < 0) newMargin = 0;
+            parentNode.style.marginLeft = newMargin + 'px';
+        } else {
+            prevCode = event.keyCode;
+        }
+    };
+    const handleEditList = async (e) => {
+        const divID = e.target.id;
+        const divType = e.target.type;
+        let newData = [];
+        switch (divID) {
+            case 'edit-list':
+                updateEditList(!editList);
+                break;
+            case 'delete-list':
+                dispatch(deleteList({ projectID: projectID }));
+                break;
+            case 'saving-list':
+                for (let obj of data) {
+                    let newObj = { ...Object.freeze(obj) };
+                    if (editedTasks[newObj.id]) {
+                        newData.push(editedTasks[newObj.id]);
+                    } else {
+                        newObj.title = listTitle;
+                        newData.push(newObj);
+                    }
+                }
+                dispatch(saveTasks(newData));
+                // wait to save properly
+                // display loading
+                // when get success then update the editList
+                updateData(newData);
+                updateEditList(!editList);
+                break;
+            case 'edit-title':
+                listTitle = e.target.value;
+                if (e.keyCode && e.keyCode === 13) {
+                    const inputs = document.getElementsByClassName('create-task-input');
+                    if (inputs && inputs.length) {
+                        const nextInput = inputs[0];
+                        nextInput.focus();
+                    }
+                }
+                break;
+            default:
+                if (divType && divType == 'checkbox') {
+                    for (let obj of data) {
+                        let newObj = { ...Object.freeze(obj) };
+                        if (newObj.id === divID) {
+                            newObj.completed = !newObj.completed;
+                            dispatch(saveTasks([newObj]));
+                        }
+                        newData.push(newObj);
+                    }
+                    // dispatch(toggleTask({ id: divID, projectID: projectID }));
+                    updateData(newData);
+                } else {
+                    if (divID) {
+                        let edit = tasks.find((task) => task.id === divID);
+                        let editNew = { ...Object.freeze(edit) };
+                        const margin = getMargin(e.target.parentNode);
+                        editNew.task = e.target.value;
+                        editNew.indent = margin;
+                        editNew.title = listTitle;
+                        editedTasks[editNew.id] = editNew;
+                    } else {
+                        if (e.keyCode === 13) {
+                            const margin = getMargin(e.target.parentNode);
+                            const taskId = nanoid(10);
+                            const newToDo = {
+                                id: taskId,
+                                task: e.target.value,
+                                completed: false,
+                                projectID: projectID,
+                                title: listTitle,
+                                indent: margin,
+                                taskOrder: orderId
+                            };
+                            editedTasks[newToDo.id] = newToDo;
+                            updateData([...data, newToDo]);
+                            e.target.value = '';
+                            orderId = orderId + 1;
+                        }
+                    }
+                }
+
+                break;
+        }
     };
     return (
         <div className="single-list">
             <div className="single-list-control-panel">
                 <div
                     className="single-list-control-buttons"
+                    id="edit-list"
                     role="presentation"
-                    id={projectID}
                     onClick={handleEditList}
                 >
                     ✏️
                 </div>
-                <div className="single-list-control-buttons">❌</div>
+                <div
+                    className="single-list-control-buttons"
+                    id="delete-list"
+                    role="presentation"
+                    onClick={handleEditList}
+                >
+                    ❌
+                </div>
             </div>
             <div className="single-list-content">
                 <div className="single-list-title">
                     {editList ? (
-                        <input placeholder="Enter a TITLE and press RETURN" defaultValue={listTitle} />
+                        <input
+                            id="edit-title"
+                            placeholder="Enter a TITLE"
+                            defaultValue={listTitle}
+                            onKeyUp={handleEditList}
+                        />
                     ) : (
                         listTitle
                     )}
@@ -48,16 +163,18 @@ const SingleList = ({ data }) => {
                                 <input
                                     type="checkbox"
                                     checked={task.completed}
-                                    id={task.id}
+                                    id={editList ? 'disabled-toggle-' + task.id : task.id}
                                     disabled={editList}
-                                    onChange={handleToggle}
+                                    onChange={handleEditList}
                                 />
                                 {editList ? (
                                     <input
-                                        className="create-single-list-task-input"
+                                        className="create-task-input"
                                         id={task.id}
                                         placeholder="Enter a TASK and press RETURN"
                                         defaultValue={task.task}
+                                        onKeyUp={handleEditList}
+                                        onKeyDown={indentTaskInput}
                                     />
                                 ) : (
                                     task.task
@@ -66,22 +183,26 @@ const SingleList = ({ data }) => {
                         );
                     })}
                     {editList && (
-                        <div className="create-single-list-task">
+                        <div className="single-list-task">
                             <input type="checkbox" checked={false} disabled={true} />
                             <input
-                                className="create-single-list-task-input"
+                                className="create-task-input"
                                 placeholder="Enter a TASK and press RETURN"
                                 // eslint-disable-next-line jsx-a11y/no-autofocus
                                 autoFocus
+                                onKeyUp={handleEditList}
+                                onKeyDown={indentTaskInput}
                             />
                         </div>
                     )}
                 </div>
             </div>
             {editList && (
-                <div className="create-list-footer">
-                    <div className="create-list-footer-content">
-                        <button className="create-list-save-button">Save</button>
+                <div className="save-list-footer">
+                    <div className="save-list-footer-content">
+                        <button className="save-list-save-button" id="saving-list" onClick={handleEditList}>
+                            Save
+                        </button>
                     </div>
                 </div>
             )}

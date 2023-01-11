@@ -1,10 +1,20 @@
 .dashboard {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     flex-wrap: wrap;
     flex-grow: 1;
   
     /* border: 1px red solid; */
+}
+
+.dashboard-actions {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 5px;
+    margin: 20px;
+
+    /* border: 1px blue solid; */
 }
 
 .dashboard-content {
@@ -16,4 +26,30 @@
     margin: 20px;
 
     /* border: 1px blue solid; */
+}
+
+.dashboard-actions-content {
+
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 0px 15px;
+    flex: 1;
+
+    /* border: 1px solid pink; */
+
+}
+
+.action-create {
+    color: var(--yellow);
+    font-size: 45px;
+    background: none;
+    border: none;
+    /* border-bottom: 2px dashed var(--green);     */
+}
+
+.action-create:hover {
+    text-shadow:  1px 1px 5px #00fa9a, 1px -1px 15px #ffdb58, -1px 1px 5px #00fa9a,
+    -1px -1px 15px #ffdb58;
+
 }

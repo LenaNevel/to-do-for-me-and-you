@@ -4,7 +4,7 @@ const { nanoid } = require('nanoid');
 import './index.css';
 
 import { useDispatch } from 'react-redux';
-import { saveNewTask } from '../../redux/toDoSlice';
+import { saveTasks } from '../../redux/toDoSlice';
 
 let title = '';
 let orderId = 0;
@@ -73,7 +73,7 @@ const CreateToDoList = () => {
     };
 
     const saveList = () => {
-        dispatch(saveNewTask(data));
+        dispatch(saveTasks(data));
     };
 
     return (

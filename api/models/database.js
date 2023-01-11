@@ -12,7 +12,7 @@ const db = new sqlite3.Database(DBSOURCE, (err) => {
         console.log('Creating title table first')
         db.run(`CREATE TABLE title (
             id VARCHAR(10) PRIMARY KEY,
-            name TEXT, 
+            name TEXT,
             created DATE, 
             updated DATE
             )`,
@@ -29,20 +29,7 @@ const db = new sqlite3.Database(DBSOURCE, (err) => {
             id VARCHAR(10) PRIMARY KEY,
             title VARCHAR(10), 
             task TEXT, 
-            completed BOOLEAN
-            )`,
-        (err) => {
-            if (err) {
-                // Table already created
-                console.log(err.message)
-            }else{
-                console.log('CREATED TABLE tasks')
-            }
-        });
-        console.log('Creating attributes table next...');
-        db.run(`CREATE TABLE attributes (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            taskID VARCHAR(10),
+            completed BOOLEAN,
             indent INTEGER,
             taskOrder INTEGER
             )`,
@@ -51,9 +38,9 @@ const db = new sqlite3.Database(DBSOURCE, (err) => {
                 // Table already created
                 console.log(err.message)
             }else{
-                console.log('CREATED TABLE attributes')
+                console.log('CREATED TABLE tasks')
             }
-        });   
+        }); 
     }
 });
 
