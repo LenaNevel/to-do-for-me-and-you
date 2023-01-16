@@ -4,12 +4,19 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "install-server": "cd api && npm install",
+    "install-client": "cd client && npm install",
+    "postinstall": "npm run install-server && npm run install-client",
+    "start-server": "cd api && npm run dev",
+    "start-client": "cd client && npm start",
+    "start-app": "concurrently \"npm:start-server\" \"npm:start-client\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "concurrently": "^7.6.0",
     "node": "^19.3.0",
     "react": "^18.2.0",
     "webpack": "^5.75.0"
