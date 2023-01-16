@@ -9,15 +9,12 @@ const Dashboard = () => {
     const [addNew, updateAddNew] = useState(null);
     let { toDoLists, isSuccess } = useSelector((state) => state.toDoLists);
     const dispatch = useDispatch();
-    // add what happens if it's loading
-    // add what happens if there is an error;
+
     useEffect(() => {
-        // add the it's not loading
         !isSuccess && dispatch(getToDoLists());
     }, [dispatch, isSuccess]);
 
     const addNewList = () => {
-        console.log('adding new list');
         let numberOfNew = addNew;
         if (!numberOfNew) numberOfNew = 0;
         updateAddNew(numberOfNew + 1);

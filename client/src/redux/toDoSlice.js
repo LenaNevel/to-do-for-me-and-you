@@ -13,7 +13,6 @@ const headers = {
 
 export const getToDoLists = createAsyncThunk('/lists', async () => {
     try {
-        // need to move the api call to it's own function;
         const lists = await fetch('http://localhost:4000/api/lists').then((data) => data.json());
         return lists;
     } catch (err) {
@@ -27,7 +26,6 @@ const toDoListsSlice = createSlice({
     initialState,
     reducers: {
         saveTasks(state, { payload }) {
-            // move list title and project ID to utils since we re-use this;
             const listTitle = (payload.find((x) => x && x.title) || {}).title;
             let projectID = (payload.find((x) => x && x.projectID) || {}).projectID;
             if (listTitle) {

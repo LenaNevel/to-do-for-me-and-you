@@ -61,9 +61,6 @@ const SingleList = ({ tasks }) => {
                     }
                 }
                 dispatch(saveTasks(newData));
-                // wait to save properly
-                // display loading
-                // when get success then update the editList
                 updateData(newData);
                 updateEditList(!editList);
                 break;
@@ -87,7 +84,6 @@ const SingleList = ({ tasks }) => {
                         }
                         newData.push(newObj);
                     }
-                    // dispatch(toggleTask({ id: divID, projectID: projectID }));
                     updateData(newData);
                 } else {
                     if (divID) {
