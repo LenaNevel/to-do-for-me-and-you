@@ -6,9 +6,8 @@ import { getToDoLists } from '../../redux/toDoSlice';
 import SingleList from '../../components/singleList';
 
 const Dashboard = () => {
-    const [addNew, updateAddNew] = useState(false);
+    const [addNew, updateAddNew] = useState(null);
     let { toDoLists, isSuccess } = useSelector((state) => state.toDoLists);
-    // const [lists, updateLists] = useState([]);
     const dispatch = useDispatch();
     // add what happens if it's loading
     // add what happens if there is an error;
@@ -17,14 +16,11 @@ const Dashboard = () => {
         !isSuccess && dispatch(getToDoLists());
     }, [dispatch, isSuccess]);
 
-    // if (isSuccess) {
-    //     updateLists(toDoLists);
-    // }
-
     const addNewList = () => {
         console.log('adding new list');
-        updateAddNew(true);
-        // documentContent.appendChild(document.createElement(<SingleList tasks={[]} key="new" />));
+        let numberOfNew = addNew;
+        if (!numberOfNew) numberOfNew = 0;
+        updateAddNew(numberOfNew + 1);
     };
     return (
         <div className="dashboard">
@@ -41,7 +37,12 @@ const Dashboard = () => {
                     Object.keys(toDoLists).map((list) => {
                         return <SingleList tasks={toDoLists[list]} key={list} />;
                     })}
-                {addNew && <SingleList tasks={[]} key="new" />}
+                {addNew &&
+                    Array(addNew)
+                        .fill('new')
+                        .map((_, index) => {
+                            return <SingleList tasks={[]} key={index} />;
+                        })}
             </div>
         </div>
     );
