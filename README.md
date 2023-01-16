@@ -1,9 +1,11 @@
 # To Do List App
 
-[Project Outline](#Project-Outline)<br>
-[Visualization](#Visualization)<br>
-[How to Run the App Locally](#How-to-Run-the-App-Locally)<br>
-[Directory Structure](#Directory-Structure)<br>
+- [Project Outline](#Project-Outline)<br>
+- [Observe in Action](#Observe-in-Action)<br>
+- [How to Run the App Locally](#How-to-Run-the-App-Locally)<br>
+  - [Run Entire App at Once](#Run-Entire-App-at-Once)<br>
+  - [Run Back End Only](#Run-Back-End-Only)<br>
+  - [Run Front End Only](#Run-Front-End-Only)<br>
 
 ---
 
@@ -17,14 +19,27 @@ In terms of data structure, I settled on using SQLite. Keeping the data stored o
 
 ---
 
-## Visualization
+## Observe in Action
+
+<p align="center"><img src="./gifs/observe.gif"></p>
 
 ---
 
 ## How to Run the App Locally
 
----
+### Run Entire App at Once
 
-## Directory Structure
+`npm install`<br>
+`npm run start-app`
+
+### Run Back End Only
+
+`npm install`<br>
+`npm run start-server`
+
+### Run Front End Only
+
+`npm install`<br>
+`npm run start-client`
 
 ---
