@@ -20,7 +20,8 @@ const SingleList = ({ tasks }) => {
 
     const dispatch = useDispatch();
     let listTitle = (data.find((x) => x && x.title) || {}).title;
-    const projectID = (data.find((x) => x && x.projectID) || {}).projectID;
+    let projectID = (data.find((x) => x && x.projectID) || {}).projectID;
+    if (!projectID) projectID = nanoid(10);
 
     const getMargin = (div) => {
         let margin = parseInt(div.style.marginLeft.replace('px', ''));
@@ -65,7 +66,9 @@ const SingleList = ({ tasks }) => {
                 updateEditList(!editList);
                 break;
             case 'edit-title':
+                console.log(listTitle);
                 listTitle = e.target.value;
+                console.log(listTitle);
                 if (e.keyCode && e.keyCode === 13) {
                     const inputs = document.getElementsByClassName('create-task-input');
                     if (inputs && inputs.length) {

@@ -6,9 +6,9 @@
     gap: 5px;
     max-width: 500px;
 
-    border: 3px groove #98FB98;
+    border: 3px groove #98fb98;
 
-    min-width: 350px
+    min-width: 350px;
 }
 
 .single-list > .single-list-control-panel {
@@ -21,11 +21,9 @@
     gap: 15px;
     padding: 0px 15px;
     border-radius: 30px;
-    
 
     justify-content: flex-end;
-    }
-
+}
 
 .single-list-control-buttons {
     color: white;
@@ -34,18 +32,16 @@
 }
 
 .single-list-control-buttons:hover {
-    text-shadow:  1px 1px 5px #00fa9a, 1px -1px 15px #ffdb58, -1px 1px 5px #00fa9a,
-    -1px -1px 15px #ffdb58;
-} 
+    text-shadow: 1px 1px 5px #00fa9a, 1px -1px 15px #ffdb58, -1px 1px 5px #00fa9a, -1px -1px 15px #ffdb58;
+}
 
 .single-list-content {
     display: flex;
     flex-direction: column;
     gap: 15px;
     padding: 15px;
-   
 
-    border: 2px dashed #E37383;
+    border: 2px dashed #e37383;
 }
 
 .single-list-title {
@@ -57,7 +53,7 @@
     border-bottom: 2px solid white;
 }
 
-.single-list-title >input {
+.single-list-title > input {
     background-color: #212121;
     color: var(--white);
     font-weight: 900;
@@ -65,26 +61,24 @@
     text-align: center;
     outline: none !important;
     border: none;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-  }
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',
+        'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+}
 
 .single-list-tasks {
     display: flex;
     flex-direction: column;
     gap: 3px;
-  
 }
-
 
 .single-list-task {
     display: flex;
     flex-direction: row;
-    gap: 5px
+    gap: 5px;
 }
 
-
-.single-list-task >input {
-    accent-color: #98FB98;
+.single-list-task > input {
+    accent-color: #98fb98;
 }
 
 .create-task-input {
@@ -92,20 +86,21 @@
     color: var(--white);
     text-align: flex-start;
     font-size: 16px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',
+        'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     width: 100%;
     outline: none !important;
     border: none;
-  }
+}
 
-  .save-list-footer {
+.save-list-footer {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     height: 5%;
-  }
-  
-  .save-list-footer-content {
+}
+
+.save-list-footer-content {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -113,14 +108,14 @@
     align-items: center;
     justify-content: flex-end;
     padding: 5px 5px 0px 5px;
-  }
-  
-  .save-list-save-button {
+}
+
+.save-list-save-button {
     background-color: white;
     color: #212121;
     border-radius: 10px;
-    border: 2px #98FB98 solid;
+    border: 2px #98fb98 solid;
     font-size: 12px;
     font-weight: 900;
     padding: 0px 10px;
-  }
+}
