@@ -8,7 +8,7 @@ import { saveTasks, deleteList } from '../../redux/toDoSlice';
 
 let orderId = 0;
 
-const SingleList = ({ tasks }) => {
+const SingleList = ({ tasks, newId }) => {
     let prevCode;
     let editedTasks = {};
 
@@ -61,14 +61,16 @@ const SingleList = ({ tasks }) => {
                         newData.push(newObj);
                     }
                 }
+                if (newId) {
+                    const hideDiv = document.getElementById(newId);
+                    hideDiv.style.display = 'none';
+                }
                 dispatch(saveTasks(newData));
                 updateData(newData);
                 updateEditList(!editList);
                 break;
             case 'edit-title':
-                console.log(listTitle);
                 listTitle = e.target.value;
-                console.log(listTitle);
                 if (e.keyCode && e.keyCode === 13) {
                     const inputs = document.getElementsByClassName('create-task-input');
                     if (inputs && inputs.length) {
@@ -122,7 +124,7 @@ const SingleList = ({ tasks }) => {
         }
     };
     return (
-        <div className="single-list">
+        <div className="single-list" id={newId ? newId : projectID}>
             <div className="single-list-control-panel">
                 <div
                     className="single-list-control-buttons"

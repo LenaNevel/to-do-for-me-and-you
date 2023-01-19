@@ -12,10 +12,6 @@
 }
 
 .single-list > .single-list-control-panel {
-    display: none;
-}
-
-.single-list:hover .single-list-control-panel {
     display: flex;
     flex-direction: row;
     gap: 15px;

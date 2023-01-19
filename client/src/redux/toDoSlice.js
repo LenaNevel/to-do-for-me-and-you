@@ -28,8 +28,6 @@ const toDoListsSlice = createSlice({
         saveTasks(state, { payload }) {
             const listTitle = (payload.find((x) => x && x.title) || {}).title;
             let projectID = (payload.find((x) => x && x.projectID) || {}).projectID;
-            console.log(projectID);
-            console.log(listTitle);
             if (listTitle) {
                 fetch('http://localhost:4000/api/edit-list', {
                     method: 'POST',
@@ -39,7 +37,6 @@ const toDoListsSlice = createSlice({
             }
             if (projectID) {
                 state.toDoLists[projectID] = payload;
-                console.log(state.toDoLists[projectID]);
             }
         },
         deleteList(state, { payload }) {

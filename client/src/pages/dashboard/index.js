@@ -29,17 +29,17 @@ const Dashboard = () => {
                 </div>
             </div>
             <div className="dashboard-content">
+                {addNew &&
+                    Array(addNew)
+                        .fill('new')
+                        .map((_, index) => {
+                            return <SingleList tasks={[]} newId={`new-${index}`} key={index} />;
+                        })}
                 {isSuccess &&
                     toDoLists &&
                     Object.keys(toDoLists).map((list) => {
                         return <SingleList tasks={toDoLists[list]} key={list} />;
                     })}
-                {addNew &&
-                    Array(addNew)
-                        .fill('new')
-                        .map((_, index) => {
-                            return <SingleList tasks={[]} key={index} />;
-                        })}
             </div>
         </div>
     );
