@@ -6,6 +6,7 @@
   - [Run Entire App at Once](#Run-Entire-App-at-Once)<br>
   - [Run Back End Only](#Run-Back-End-Only)<br>
   - [Run Front End Only](#Run-Front-End-Only)<br>
+- [Future Additions](#Future-Additions)<br>
 
 ---
 
@@ -21,7 +22,7 @@ In terms of data structure, I settled on using SQLite. Keeping the data stored o
 
 ## Observe in Action
 
-<p align="center"><img src="./gifs/observe.gif"></p>
+<p align="center"><img src="./gifs/observe-app.gif"></p>
 
 ---
 
@@ -43,3 +44,10 @@ In terms of data structure, I settled on using SQLite. Keeping the data stored o
 `npm run start-client`
 
 ---
+
+## Future Additions
+
+- add hide completed/incomplete
+- add sorting by dates of last modified
+- add ability to add subtasks to tasks in the middle of existing list
+- add ability to have "re-usable" lists that can be attached to another list
