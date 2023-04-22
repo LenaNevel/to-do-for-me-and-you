@@ -28,6 +28,8 @@ In terms of data structure, I settled on using SQLite. Keeping the data stored o
 
 ## How to Run the App Locally
 
+uses Node v18
+
 ### Run Entire App at Once
 
 `npm install`<br>
@@ -50,4 +52,3 @@ In terms of data structure, I settled on using SQLite. Keeping the data stored o
 - add hide completed/incomplete
 - add sorting by dates of last modified
 - add ability to add subtasks to tasks in the middle of existing list
-- add ability to have "re-usable" lists that can be attached to another list

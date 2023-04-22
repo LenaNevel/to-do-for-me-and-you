@@ -9,6 +9,7 @@
     border: 3px groove #98fb98;
 
     min-width: 350px;
+    margin: 0px 10px 0px 0px;
 }
 
 .single-list > .single-list-control-panel {
@@ -114,4 +115,12 @@
     font-size: 12px;
     font-weight: 900;
     padding: 0px 10px;
+}
+
+@media (max-width: 800px) {
+    .single-list {
+        min-width: 0px;
+        max-width: 800px;
+        width: -webkit-fill-available;
+    }
 }

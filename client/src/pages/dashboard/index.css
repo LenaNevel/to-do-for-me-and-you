@@ -10,9 +10,7 @@
 .dashboard-actions {
     display: flex;
     flex-direction: column;
-    padding: 10px;
     gap: 5px;
-    margin: 20px;
 }
 
 .dashboard-content {
@@ -21,7 +19,7 @@
     flex-wrap: wrap;
     flex-grow: 1;
     gap: 15px;
-    margin: 20px;
+    margin: 5px;
 
     align-content: flex-start;
     overflow: scroll;
@@ -44,4 +42,23 @@
 
 .action-create:hover {
     text-shadow: 1px 1px 5px #00fa9a, 1px -1px 15px #ffdb58, -1px 1px 5px #00fa9a, -1px -1px 15px #ffdb58;
+}
+
+@media (max-width: 800px) {
+    .dashboard-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .dashboard-content {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        flex-grow: 1;
+        gap: 15px;
+        margin: 5px 0px;
+        align-items: stretch;
+        overflow: scroll;
+    }
 }
