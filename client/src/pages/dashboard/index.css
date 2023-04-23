@@ -40,7 +40,30 @@
     border: none;
 }
 
-.action-create:hover {
+.action-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.action-title {
+    color: var(--yellow);
+    font-size: 20px;
+    background: none;
+    border: none;
+
+    text-decoration: underline;
+    font: 900;
+    align-self: center;
+}
+
+.action-hide {
+    border: none;
+    background: none;
+    font-size: 20px;
+}
+
+button:hover {
     text-shadow: 1px 1px 5px #00fa9a, 1px -1px 15px #ffdb58, -1px 1px 5px #00fa9a, -1px -1px 15px #ffdb58;
 }
 

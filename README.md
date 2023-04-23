@@ -52,3 +52,4 @@ uses Node v18
 - add hide completed/incomplete
 - add sorting by dates of last modified
 - add ability to add subtasks to tasks in the middle of existing list
+- authentication

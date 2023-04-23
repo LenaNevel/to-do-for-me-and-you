@@ -10,17 +10,22 @@ let orderId = 0;
 
 const SingleList = ({ tasks, newId }) => {
     let prevCode;
-    let editedTasks = {};
 
     if (tasks && tasks.length) {
         orderId = tasks.length + 1;
     }
+
+    const [editedTasks, updateEitedTasks] = useState({});
     const [editList, updateEditList] = useState(tasks && tasks.length ? false : true);
     const [data, updateData] = useState([...tasks]);
 
+    if (tasks.length != data.length && !Object.keys(editedTasks).length) updateData([...tasks]);
+
     const dispatch = useDispatch();
+
     let listTitle = (data.find((x) => x && x.title) || {}).title;
     let projectID = (data.find((x) => x && x.projectID) || {}).projectID;
+
     if (!projectID) projectID = nanoid(10);
 
     const getMargin = (div) => {
@@ -65,9 +70,11 @@ const SingleList = ({ tasks, newId }) => {
                     const hideDiv = document.getElementById(newId);
                     hideDiv.style.display = 'none';
                 }
-                dispatch(saveTasks(newData));
                 updateData(newData);
+                dispatch(saveTasks(newData));
+
                 updateEditList(!editList);
+                updateEitedTasks({});
                 break;
             case 'edit-title':
                 listTitle = e.target.value;
@@ -82,23 +89,26 @@ const SingleList = ({ tasks, newId }) => {
             default:
                 if (divType && divType == 'checkbox') {
                     for (let obj of data) {
+                        console.log(obj);
                         let newObj = { ...Object.freeze(obj) };
                         if (newObj.id === divID) {
                             newObj.completed = !newObj.completed;
-                            dispatch(saveTasks([newObj]));
                         }
                         newData.push(newObj);
                     }
+                    dispatch(saveTasks([newData]));
                     updateData(newData);
                 } else {
                     if (divID) {
+                        let newEditedTasks = { ...Object.freeze(editedTasks) };
                         let edit = tasks.find((task) => task.id === divID);
                         let editNew = { ...Object.freeze(edit) };
                         const margin = getMargin(e.target.parentNode);
                         editNew.task = e.target.value;
                         editNew.indent = margin;
                         editNew.title = listTitle;
-                        editedTasks[editNew.id] = editNew;
+                        newEditedTasks[editNew.id] = editNew;
+                        updateEitedTasks(newEditedTasks);
                     } else {
                         if (e.keyCode === 13) {
                             const margin = getMargin(e.target.parentNode);
@@ -112,7 +122,9 @@ const SingleList = ({ tasks, newId }) => {
                                 indent: margin,
                                 taskOrder: orderId
                             };
-                            editedTasks[newToDo.id] = newToDo;
+                            let newEditedTasks = { ...Object.freeze(editedTasks) };
+                            newEditedTasks[newToDo.id] = newToDo;
+                            updateEitedTasks(newEditedTasks);
                             updateData([...data, newToDo]);
                             e.target.value = '';
                             orderId = orderId + 1;
@@ -159,8 +171,13 @@ const SingleList = ({ tasks, newId }) => {
                 <div className="single-list-tasks">
                     {data.map((task) => {
                         const margin = task.indent ? task.indent + 'px' : '0px';
+
                         return (
-                            <label className="single-list-task" key={task.id} style={{ marginLeft: margin }}>
+                            <label
+                                className={task.hide ? 'single-list-task-hide' : 'single-list-task'}
+                                key={task.id}
+                                style={{ marginLeft: margin }}
+                            >
                                 <input
                                     type="checkbox"
                                     checked={task.completed}
