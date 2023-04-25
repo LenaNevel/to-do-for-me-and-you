@@ -8,23 +8,24 @@ import { saveTasks, deleteList } from '../../redux/toDoSlice';
 
 let orderId = 0;
 
-const SingleList = ({ tasks, newId }) => {
+const SingleList = ({ tasks, allTasks, newId }) => {
     let prevCode;
 
     if (tasks && tasks.length) {
         orderId = tasks.length + 1;
     }
 
-    const [editedTasks, updateEitedTasks] = useState({});
+    const [editedTasks, updateEditedTasks] = useState({});
     const [editList, updateEditList] = useState(tasks && tasks.length ? false : true);
     const [data, updateData] = useState([...tasks]);
+    const [newAddedData, updateNewData] = useState([]);
 
     if (tasks.length != data.length && !Object.keys(editedTasks).length) updateData([...tasks]);
 
     const dispatch = useDispatch();
 
-    let listTitle = (data.find((x) => x && x.title) || {}).title;
-    let projectID = (data.find((x) => x && x.projectID) || {}).projectID;
+    let listTitle = (allTasks.find((x) => x && x.title) || {}).title;
+    let projectID = (allTasks.find((x) => x && x.projectID) || {}).projectID;
 
     if (!projectID) projectID = nanoid(10);
 
@@ -57,7 +58,7 @@ const SingleList = ({ tasks, newId }) => {
                 dispatch(deleteList({ projectID: projectID }));
                 break;
             case 'saving-list':
-                for (let obj of data) {
+                for (let obj of allTasks) {
                     let newObj = { ...Object.freeze(obj) };
                     if (editedTasks[newObj.id]) {
                         newData.push(editedTasks[newObj.id]);
@@ -70,11 +71,14 @@ const SingleList = ({ tasks, newId }) => {
                     const hideDiv = document.getElementById(newId);
                     hideDiv.style.display = 'none';
                 }
-                updateData(newData);
+                newData = [...newData, ...newAddedData];
+
                 dispatch(saveTasks(newData));
 
+                updateData(newData);
                 updateEditList(!editList);
-                updateEitedTasks({});
+                updateEditedTasks({});
+                updateNewData([]);
                 break;
             case 'edit-title':
                 listTitle = e.target.value;
@@ -88,27 +92,26 @@ const SingleList = ({ tasks, newId }) => {
                 break;
             default:
                 if (divType && divType == 'checkbox') {
-                    for (let obj of data) {
-                        console.log(obj);
+                    for (let obj of allTasks) {
                         let newObj = { ...Object.freeze(obj) };
                         if (newObj.id === divID) {
                             newObj.completed = !newObj.completed;
                         }
                         newData.push(newObj);
                     }
-                    dispatch(saveTasks([newData]));
+                    dispatch(saveTasks(newData));
                     updateData(newData);
                 } else {
                     if (divID) {
                         let newEditedTasks = { ...Object.freeze(editedTasks) };
-                        let edit = tasks.find((task) => task.id === divID);
+                        let edit = allTasks.find((task) => task.id === divID);
                         let editNew = { ...Object.freeze(edit) };
                         const margin = getMargin(e.target.parentNode);
                         editNew.task = e.target.value;
                         editNew.indent = margin;
                         editNew.title = listTitle;
                         newEditedTasks[editNew.id] = editNew;
-                        updateEitedTasks(newEditedTasks);
+                        updateEditedTasks(newEditedTasks);
                     } else {
                         if (e.keyCode === 13) {
                             const margin = getMargin(e.target.parentNode);
@@ -124,8 +127,8 @@ const SingleList = ({ tasks, newId }) => {
                             };
                             let newEditedTasks = { ...Object.freeze(editedTasks) };
                             newEditedTasks[newToDo.id] = newToDo;
-                            updateEitedTasks(newEditedTasks);
-                            updateData([...data, newToDo]);
+                            updateEditedTasks(newEditedTasks);
+                            updateNewData([...newAddedData, newToDo]);
                             e.target.value = '';
                             orderId = orderId + 1;
                         }
@@ -169,23 +172,44 @@ const SingleList = ({ tasks, newId }) => {
                     )}
                 </div>
                 <div className="single-list-tasks">
-                    {data.map((task) => {
-                        const margin = task.indent ? task.indent + 'px' : '0px';
+                    {!editList &&
+                        data.map((task) => {
+                            const margin = task.indent ? task.indent + 'px' : '0px';
 
-                        return (
-                            <label
-                                className={task.hide ? 'single-list-task-hide' : 'single-list-task'}
-                                key={task.id}
-                                style={{ marginLeft: margin }}
-                            >
-                                <input
-                                    type="checkbox"
-                                    checked={task.completed}
-                                    id={editList ? 'disabled-toggle-' + task.id : task.id}
-                                    disabled={editList}
-                                    onChange={handleEditList}
-                                />
-                                {editList ? (
+                            return (
+                                <label
+                                    className="single-list-task"
+                                    key={task.id}
+                                    style={{ marginLeft: margin }}
+                                >
+                                    <input
+                                        type="checkbox"
+                                        checked={task.completed}
+                                        id={task.id}
+                                        disabled={editList}
+                                        onChange={handleEditList}
+                                    />
+                                    {task.task}
+                                </label>
+                            );
+                        })}
+                    {editList &&
+                        allTasks.map((task) => {
+                            const margin = task.indent ? task.indent + 'px' : '0px';
+
+                            return (
+                                <label
+                                    className="single-list-task"
+                                    key={task.id}
+                                    style={{ marginLeft: margin }}
+                                >
+                                    <input
+                                        type="checkbox"
+                                        checked={task.completed}
+                                        id={'disabled-toggle-' + task.id}
+                                        disabled={editList}
+                                        onChange={handleEditList}
+                                    />
                                     <input
                                         className="create-task-input"
                                         id={task.id}
@@ -194,12 +218,37 @@ const SingleList = ({ tasks, newId }) => {
                                         onKeyUp={handleEditList}
                                         onKeyDown={indentTaskInput}
                                     />
-                                ) : (
-                                    task.task
-                                )}
-                            </label>
-                        );
-                    })}
+                                </label>
+                            );
+                        })}
+                    {newAddedData.length > 0 &&
+                        newAddedData.map((task) => {
+                            const margin = task.indent ? task.indent + 'px' : '0px';
+
+                            return (
+                                <label
+                                    className="single-list-task"
+                                    key={task.id}
+                                    style={{ marginLeft: margin }}
+                                >
+                                    <input
+                                        type="checkbox"
+                                        checked={task.completed}
+                                        id={'disabled-toggle-' + task.id}
+                                        disabled={editList}
+                                        onChange={handleEditList}
+                                    />
+                                    <input
+                                        className="create-task-input"
+                                        id={task.id}
+                                        placeholder="Enter a TASK and press RETURN"
+                                        defaultValue={task.task}
+                                        onKeyUp={handleEditList}
+                                        onKeyDown={indentTaskInput}
+                                    />
+                                </label>
+                            );
+                        })}
                     {editList && (
                         <div className="single-list-task">
                             <input type="checkbox" checked={false} disabled={true} />

@@ -6,9 +6,8 @@ import { getToDoLists, updateHideStatus } from '../../redux/toDoSlice';
 import SingleList from '../../components/singleList';
 
 const Dashboard = () => {
-    let [hide, updateHide] = useState({ complete: false, incomplete: false });
     const [addNew, updateAddNew] = useState(null);
-    let { toDoLists, isSuccess } = useSelector((state) => state.toDoLists);
+    let { toDoLists, allToDoLists, isSuccess } = useSelector((state) => state.toDoLists);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -21,10 +20,7 @@ const Dashboard = () => {
         updateAddNew(numberOfNew + 1);
     };
     const hideTasks = (event) => {
-        let newHide = { ...Object.freeze(hide) };
-        newHide[event.target.id] = !newHide[event.target.id];
-        updateHide(newHide);
-        dispatch(updateHideStatus(newHide));
+        dispatch(updateHideStatus(event.target.id));
     };
     return (
         <div className="dashboard">
@@ -54,7 +50,9 @@ const Dashboard = () => {
                 {isSuccess &&
                     toDoLists &&
                     Object.keys(toDoLists).map((list) => {
-                        return <SingleList tasks={toDoLists[list]} key={list} />;
+                        return (
+                            <SingleList tasks={toDoLists[list]} allTasks={allToDoLists[list]} key={list} />
+                        );
                     })}
             </div>
         </div>

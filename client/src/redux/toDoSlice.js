@@ -4,7 +4,8 @@ const initialState = {
     toDoLists: {},
     allToDoLists: {},
     loading: false,
-    isSuccess: false
+    isSuccess: false,
+    hide: { complete: false, incomplete: false }
 };
 
 const headers = {
@@ -22,6 +23,28 @@ export const getToDoLists = createAsyncThunk('/lists', async () => {
     }
 });
 
+function updateToDoList(hide, lists) {
+    if (!(hide.complete || hide.incomplete)) {
+        return lists;
+    } else {
+        try {
+            let filteredLists = {};
+            for (const listId of Object.keys(lists)) {
+                let filteredList = lists[listId].filter((task) => {
+                    if (!((task.completed && hide.complete) || (!task.completed && hide.incomplete)))
+                        return task;
+                });
+
+                filteredLists[listId] = filteredList;
+            }
+            return filteredLists;
+        } catch (err) {
+            console.log('THERE WAS AN ERROR FILTERING THE LISTS');
+            console.log(err);
+        }
+    }
+}
+
 const toDoListsSlice = createSlice({
     name: 'lists',
     initialState,
@@ -38,8 +61,9 @@ const toDoListsSlice = createSlice({
                 });
             }
             if (projectID) {
-                state.toDoLists[projectID] = payload;
                 state.allToDoLists[projectID] = payload;
+                const newToDoLists = updateToDoList(state.hide, state.allToDoLists);
+                state.toDoLists = newToDoLists;
             }
         },
         deleteList(state, { payload }) {
@@ -55,27 +79,9 @@ const toDoListsSlice = createSlice({
             }
         },
         updateHideStatus(state, { payload }) {
-            if (!(payload.complete || payload.incomplete)) {
-                state.toDoLists = state.allToDoLists;
-            }
-            try {
-                let filteredLists = {};
-                for (const listId of Object.keys(state.allToDoLists)) {
-                    console.log(listId);
-                    let filteredList = state.allToDoLists[listId].filter((task) => {
-                        if (
-                            !((task.completed && payload.complete) || (!task.completed && payload.incomplete))
-                        )
-                            return task;
-                    });
-
-                    filteredLists[listId] = filteredList;
-                }
-                state.toDoLists = filteredLists;
-            } catch (err) {
-                console.log('THERE WAS AN ERROR FILTERING THE LISTS');
-                console.log(err);
-            }
+            state.hide[payload] = !state.hide[payload];
+            const newToDoLists = updateToDoList(state.hide, state.allToDoLists);
+            state.toDoLists = newToDoLists;
         }
     },
     extraReducers: {
