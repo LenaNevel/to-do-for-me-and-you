@@ -6,15 +6,13 @@ const { nanoid } = require('nanoid');
 import { useDispatch } from 'react-redux';
 import { saveTasks, deleteList } from '../../redux/toDoSlice';
 
-let orderId = 0;
-
 const SingleList = ({ tasks, allTasks, newId }) => {
     let prevCode;
-
+    let orderId = 0;
     if (tasks && tasks.length) {
         orderId = tasks.length + 1;
     }
-
+    console.log('order id 1', orderId);
     const [editedTasks, updateEditedTasks] = useState({});
     const [editList, updateEditList] = useState(tasks && tasks.length ? false : true);
     const [data, updateData] = useState([...tasks]);
@@ -24,8 +22,8 @@ const SingleList = ({ tasks, allTasks, newId }) => {
 
     const dispatch = useDispatch();
 
-    let listTitle = (allTasks.find((x) => x && x.title) || {}).title;
-    let projectID = (allTasks.find((x) => x && x.projectID) || {}).projectID;
+    let listTitle = ((allTasks || []).find((x) => x && x.title) || {}).title;
+    let projectID = ((allTasks || []).find((x) => x && x.projectID) || {}).projectID;
 
     if (!projectID) projectID = nanoid(10);
 
@@ -58,13 +56,15 @@ const SingleList = ({ tasks, allTasks, newId }) => {
                 dispatch(deleteList({ projectID: projectID }));
                 break;
             case 'saving-list':
-                for (let obj of allTasks) {
-                    let newObj = { ...Object.freeze(obj) };
-                    if (editedTasks[newObj.id]) {
-                        newData.push(editedTasks[newObj.id]);
-                    } else {
-                        newObj.title = listTitle;
-                        newData.push(newObj);
+                if (allTasks && allTasks.length > 0) {
+                    for (let obj of allTasks) {
+                        let newObj = { ...Object.freeze(obj) };
+                        if (editedTasks[newObj.id]) {
+                            newData.push(editedTasks[newObj.id]);
+                        } else {
+                            newObj.title = listTitle;
+                            newData.push(newObj);
+                        }
                     }
                 }
                 if (newId) {
@@ -128,9 +128,13 @@ const SingleList = ({ tasks, allTasks, newId }) => {
                             let newEditedTasks = { ...Object.freeze(editedTasks) };
                             newEditedTasks[newToDo.id] = newToDo;
                             updateEditedTasks(newEditedTasks);
+                            console.log('new to do being added', newToDo);
                             updateNewData([...newAddedData, newToDo]);
                             e.target.value = '';
+                            console.log('order id before adding', orderId);
                             orderId = orderId + 1;
+                            console.log('order id after adding', orderId);
+                            console.log('new added data', newAddedData);
                         }
                     }
                 }
@@ -194,6 +198,7 @@ const SingleList = ({ tasks, allTasks, newId }) => {
                             );
                         })}
                     {editList &&
+                        allTasks &&
                         allTasks.map((task) => {
                             const margin = task.indent ? task.indent + 'px' : '0px';
 
