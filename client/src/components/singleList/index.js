@@ -8,11 +8,7 @@ import { saveTasks, deleteList } from '../../redux/toDoSlice';
 
 const SingleList = ({ tasks, allTasks, newId }) => {
     let prevCode;
-    let orderId = 0;
-    if (tasks && tasks.length) {
-        orderId = tasks.length + 1;
-    }
-    console.log('order id 1', orderId);
+
     const [editedTasks, updateEditedTasks] = useState({});
     const [editList, updateEditList] = useState(tasks && tasks.length ? false : true);
     const [data, updateData] = useState([...tasks]);
@@ -123,18 +119,13 @@ const SingleList = ({ tasks, allTasks, newId }) => {
                                 projectID: projectID,
                                 title: listTitle,
                                 indent: margin,
-                                taskOrder: orderId
+                                taskOrder: (allTasks || []).length + newAddedData.length
                             };
                             let newEditedTasks = { ...Object.freeze(editedTasks) };
                             newEditedTasks[newToDo.id] = newToDo;
                             updateEditedTasks(newEditedTasks);
-                            console.log('new to do being added', newToDo);
                             updateNewData([...newAddedData, newToDo]);
                             e.target.value = '';
-                            console.log('order id before adding', orderId);
-                            orderId = orderId + 1;
-                            console.log('order id after adding', orderId);
-                            console.log('new added data', newAddedData);
                         }
                     }
                 }
