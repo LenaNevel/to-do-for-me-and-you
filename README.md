@@ -50,4 +50,5 @@ uses Node v18
 ## Future Additions
 
 - add ability to add subtasks to tasks in the middle of existing list
+- Check as done any subtasks of a checked as done task
 - authentication
